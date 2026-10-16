@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dils Website Prompt Studio · v4.0 Full-Stack & Admin Engine</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .chip-active { background-color: #f59e0b !important; color: #000 !important; font-weight: 600; border-color: #f59e0b !important; }
+    .tab-active { border-bottom: 2px solid #f59e0b; color: #f59e0b; font-weight: 600; }
+    .subtab-active { background-color: #f59e0b !important; color: #000 !important; font-weight: 700; }
+    
+    @media print {
+      body { background: #ffffff !important; color: #000000 !important; padding: 0 !important; }
+      .no-print { display: none !important; }
+      #tab-proposal { display: block !important; }
+      .print-card { border: 1px solid #e5e7eb !important; background: #ffffff !important; color: #000000 !important; box-shadow: none !important; }
+      .print-text-dark { color: #111827 !important; }
+      .print-bg-light { background: #f9fafb !important; }
+    }
+  </style>
+</head>
+<body class="bg-zinc-950 text-zinc-100 min-h-screen font-sans pb-20">
+
+  <!-- Top Header -->
+  <header class="border-b border-zinc-800 bg-zinc-900/90 backdrop-blur sticky top-0 z-50 no-print">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex flex-wrap justify-between items-center gap-4">
+      <div>
+        <span class="text-xs uppercase tracking-widest text-amber-400 font-semibold">Dils Media Network</span>
+        <h1 class="text-xl font-bold text-white flex items-center gap-2">
+          Full-Stack Prompt Studio & Quotation Engine
+          <span class="text-xs bg-amber-500/20 text-amber-300 border border-amber-500/30 px-2 py-0.5 rounded-full">v4.0 Full-Stack</span>
+        </h1>
+      </div>
+
+      <!-- Live Scope & Price Bar -->
+      <div class="flex flex-wrap items-center gap-3 text-xs md:text-sm">
+        <div class="bg-zinc-800/90 px-3 py-1.5 rounded-lg border border-zinc-700">
+          Pages: <strong id="count-pages" class="text-amber-400">4</strong>
+        </div>
+        <div class="bg-zinc-800/90 px-3 py-1.5 rounded-lg border border-zinc-700">
+          Features: <strong id="count-features" class="text-amber-400">5</strong>
+        </div>
+        <div class="bg-zinc-800/90 px-3 py-1.5 rounded-lg border border-zinc-700">
+          Admin Modules: <strong id="count-admin" class="text-sky-400">4</strong>
+        </div>
+        <div class="bg-zinc-800/90 px-3 py-1.5 rounded-lg border border-zinc-700">
+          Timeline: <strong id="live-days" class="text-emerald-400">10 Days</strong>
+        </div>
+        <div class="bg-amber-500/10 px-4 py-1.5 rounded-lg border border-amber-500/40">
+          Est. Quote: <strong id="live-price" class="text-amber-400 text-base">LKR 68,000</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="max-w-7xl mx-auto px-6 flex gap-6 text-sm border-t border-zinc-800/60 bg-zinc-950/50">
+      <button onclick="switchTab('builder')" id="btn-builder" class="py-3 px-2 tab-active transition">
+        1. Full-Stack & Admin Builder
+      </button>
+      <button onclick="switchTab('intake')" id="btn-intake" class="py-3 px-2 text-zinc-400 hover:text-white transition">
+        2. Maps & Brand Intake (AI Brief)
+      </button>
+      <button onclick="switchTab('proposal')" id="btn-proposal" class="py-3 px-2 text-zinc-400 hover:text-white transition">
+        3. Client Proposal & PDF Quote
+      </button>
+    </div>
+  </header>
+
+  <!-- ==================== TAB 1: FULL-STACK PROMPT BUILDER ==================== -->
+  <main id="tab-builder" class="max-w-7xl mx-auto px-6 py-8 grid grid-cols-1 lg:grid-cols-12 gap-8 no-print">
+    
+    <div class="lg:col-span-7 space-y-6">
+      
+      <!-- Target AI Generator Mode -->
+      <section class="bg-zinc-900/90 border border-amber-500/30 rounded-xl p-4 flex flex-wrap justify-between items-center gap-4">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-amber-400 block">Target AI Coding Environment</span>
+          <p class="text-xs text-zinc-400">Optimizes output code structure for your coding tool</p>
+        </div>
+        <select id="aiTarget" onchange="refreshAll()" class="bg-zinc-950 border border-zinc-700 rounded-lg px-3 py-2 text-xs font-semibold text-amber-300 outline-none">
+          <option value="nextjs_full">Cursor / Windsurf / Claude Code (Full Next.js + Backend Repo)</option>
+          <option value="bolt_lovable">Bolt.new / Lovable / v0 (Full-Stack Web Container + Supabase)</option>
+          <option value="single_html">Claude / ChatGPT Canvas (2 Self-Contained HTML Apps: Public + Admin)</option>
+        </select>
+      </section>
+
+      <!-- 0. Client Profile -->
+      <section class="bg-zinc-900 border border-zinc-800 rounded-xl p-6 space-y-4">
+        <h2 class="text-base font-semibold text-amber-400 border-b border-zinc-800 pb-2">0. Client & Business Profile</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs text-zinc-400 mb-1">Client / Business Name</label>
+            <input id="clientName" oninput="refreshAll()" type="text" value="Ceylon Royal Gems" class="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-2 text-sm focus:border-amber-500 outline-none">
+          </div>
+          <div>
+            <label class="block text-xs text-zinc-400 mb-1">Industry</label>
+            <select id="industry" onchange="refreshAll()" class="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-2 text-sm focus:border-amber-500 outline-none">
+              <option value="Gem & Jewellery">Gem & Jewellery</option>
+              <option value="Hospitality, Hotel & Villa">Hospitality, Hotel & Villa</option>
+              <option value="E-Commerce & Retail">E-Commerce & Retail</option>
+              <option value="Real Estate & Construction">Real Estate & Construction</option>
+              <option value="IT, SaaS & Digital Agency">IT, SaaS & Digital Agency</option>
+              <option value="Healthcare & Clinic">Healthcare & Clinic</option>
+              <option value="Education & Academy">Education & Academy</option>
+              <option value="Restaurant & Cafe">Restaurant & Cafe</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs text-zinc-400 mb-1">Location</label>
+            <input id="location" oninput="refreshAll()" type="text" value="Kandy, Sri Lanka" class="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-2 text-sm focus:border-amber-500 outline-none">
+          </div>
+          <div>
+            <label class="block text-xs text-zinc-400 mb-1">Target Audience</label>
+            <input id="audience" oninput="refreshAll()" type="text" value="International gem buyers & luxury collectors" class="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-2 text-sm focus:border-amber-500 outline-none">
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs text-zinc-400 mb-1">Business Description & Primary Conversion Goals</label>
+          <textarea id="goals" oninput="refreshAll()" rows="2" class="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-2 text-sm focus:border-amber-500 outline-none">Showcase certified natural Ceylon sapphires, allow admin to upload new gemstones with GIA certificates, and capture direct buyer inquiries & showroom appointments.</textarea>
+        </div>
+      </section>
+
+      <!-- 1. Creative Direction -->
+      <section class="bg-zinc-900 border border-zinc-800 rounded-xl p-6 space-y-4">
+        <h2 class="text-base font-semibold text-amber-400 border-b border-zinc-800 pb-2">1. Creative Direction</h2>
+        <div>
+          <label class="block text-xs text-zinc-400 mb-2">Design Personality</label>
+          <div class="flex flex-wrap gap-2" data-group="personality" data-single="true">
+            <button class="chip chip-active px-3 py-1.5 rounded-lg border border-zinc-700 bg-zinc-950 text-xs">Luxury Editorial</button>
+            <button class="chip px-3 py-1.5 rounded-lg border border-zinc-700 bg-zinc-950 text-xs">Modern Minimal</button>
+            <button class="chip px-3 py-1.5 rounded-lg border border-zinc-700 bg-zinc-950 text-xs">Bold & Creative</button>
+            <button class="chip px-3 py-1.5 rounded-lg border border-zinc-700 bg-zinc-950 text-xs">Corporate Premium</button>
+            <button class="chip px-3 py-1.5 rounded-lg border border-zinc-700 bg-zinc-950 text-xs">Warm & Organic</button>
+            <button class="chip px-3 py-1.5 rounded-lg border border-zinc-700 bg-zinc-950 text-xs">Dark Cinematic</button>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs text-zinc-400 mb-2">Color Palette</label>
+          <div class="flex flex-wrap gap-2" data-group="palette" data-single="true">
+            <button class="chip chip-active px-3 py-1.5 rounded-lg border border-zinc-700 bg-zinc-950 text-xs">Black & Gold</button>
+            <button class="chip px-3 py-1.5 rounded-lg border border-zinc-700 bg-zinc-950 text-xs">White & Royal Navy</button>
+            <button class="chip px-3 py-1.5 rounded-lg border border-zinc-700 bg-zinc-950 text-xs">Emerald & Ivory</button>
+            <button class="chip px-3 py-1.5 rounded-lg border border-zinc-700 bg-zinc-950 text-xs">Earthy Terracotta</button>
+            <button class="chip px-3 py-1.5 rounded-lg border border-zinc-700 bg-zinc-950 text-xs">Monochrome Minimal</button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs text-zinc-400 mb-1">Typography</label>
+            <select id="typography" onchange="refreshAll()" class="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-2 text-sm">
+              <option>Cormorant Garamond (Serif) + Plus Jakarta Sans</option>
+              <option>Playfair Display (Serif) + Inter (Sans)</option>
+              <option>Clean Geometric Sans (Geist / Satoshi)</option>
+              <option>Syne (Display) + DM Sans</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs text-zinc-400 mb-2">Animation Level</label>
+            <div class="flex flex-wrap gap-2" data-group="animation" data-single="true">
+              <button class="chip px-3 py-1.5 rounded-lg border border-zinc-700 bg-zinc-950 text-xs" data-price="0" data-days="0">None / Static</button>
+              <button class="chip chip-active px-3 py-1.5 rounded-lg border border-zinc-700 bg-zinc-950 text-xs" data-price="5000" data-days="1">Subtle & Premium</button>
+              <button class="chip px-3 py-1.5 rounded-lg border border-zinc-700 bg-zinc-950 text-xs" data-price="15000" data-days="3">Cinematic & Interactive</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. Public Pages & Features -->
+      <section class="bg-zinc-900 border border-zinc-800 rounded-xl p-6 space-y-5">
+        <div class="flex justify-between items-center border-b border-zinc-800 pb-2">
+          <h2 class="text-base font-semibold text-amber-400">2. Public Website Pages & Features</h2>
+          <select id="siteStructure" onchange="refreshAll()" class="bg-zinc-950 border border-zinc-700 rounded-lg px-2.5 py-1 text-xs">
+            <option value="Multi-page Architecture">Multi-page</option>
+            <option value="Single-page (One-page Scroll)">One-page</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs text-zinc-400 mb-2">Select Public Pages</label>
+          <div class="flex flex-wrap gap-2" data-group="pages">
+            <button class="chip chip-active px-3 py-1.5 rounded-lg border border-zinc-700 bg-zinc-950 text-xs">Home</button>
+            <button class="chip chip-active px-3 py-1.5 rounded-lg border border-zinc-700 bg-zinc-950 text-xs">About</button>
+            <button class="chip chip-active px-3 py-1.5 rounded-lg border border-zinc-700 bg-zinc-950 text-xs">Products / Services</button>
+            <button class="chip px-3 py-1.5 rounded-lg border border-zinc-700 bg-zinc-950 text-xs">Product Details</button>
+            <button class="chip px-3 py-1.5 rounded-lg border border-zinc-700 bg-zinc-950 text-xs">Portfolio</button>
+            <button class="chip px-3 py-1.5 rounded-lg border border-zinc-700 bg-zinc-950 text-xs">Gallery</button>
+            <button class="chip px-3 py-1.5 rounded-lg border border-zinc-700 bg-zinc-950 text-xs">Blog</button>
+            <button class="chip px-3 py-1.5 rounded-lg border border-zinc-700 bg-zinc-950 text-xs">FAQ</button>
+            <button class="chip chip-active px-3 py-1.5 rounded-lg border border-zinc-700 bg-zinc-950 text-xs">Contact</button>
+            <button class="chip px-3 py-1.5 rounded-lg border border-zinc-700 bg-zinc-950 text-xs">Booking</button>
+            <button class="chip px-3 py-1.5 rounded-lg border border-zinc-700 bg-zinc-950 text-xs">Shop</button>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs text-zinc-400 mb-2">Customer-Facing Features</label>
+          <div class="flex flex-wrap gap-2" data-group="features">
+            <button class="chip chip-active px-3 py-1.5 rounded-lg border border-zinc-700 bg-zinc-950 text-xs" data-price="3000" data-days="1">Product Gallery</button>
+            <button class="chip chip-active px-3 py-1.5 rounded-lg border border-zinc-700 bg-zinc-950 text-xs" data-price="2000" data-days="0">WhatsApp Integration</button>
+            <button class="chip chip-active px-3 py-1.5 rounded-lg border border-zinc-700 bg-zinc-950 text-xs" data-price="2500" data-days="1">Contact Form</button>
+            <button class="chip chip-active px-3 py-1.5 rounded-lg border border-zinc-700 bg-zinc-950 text-xs" data-price="4000" data-days="1">SEO Optimization</button>
+            <button class="chip chip-active px-3 py-1.5 rounded-lg border border-zinc-700 bg-zinc-950 text-xs" data-price="0" data-days="0">Responsive Design</button>
+            <button class="chip px-3 py-1.5 rounded-lg border border-zinc-700 bg-zinc-950 text-xs" data-price="1500" data-days="0">Google Maps</button>
+            <button class="chip px-3 py-1.5 rounded-lg border border-zinc-700 bg-zinc-950 text-xs" data-price="15000" data-days="3">Online Booking</button>
+            <button class="chip px-3 py-1.5 rounded-lg border border-zinc-700 bg-zinc-950 text-xs" data-price="20000" data-days="3">E-commerce Cart</button>
+            <button class="chip px-3 py-1.5 rounded-lg border border-zinc-700 bg-zinc-950 text-xs" data-price="18000" data-days="2">PayHere / Stripe Gateway</button>
+            <button class="chip px-3 py-1.5 rounded-lg border border-zinc-700 bg-zinc-950 text-xs" data-price="6000" data-days="1">Search & Filters</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. NEW: BACKEND, DATABASE & DEDICATED ADMIN PANEL -->
+      <section class="bg-zinc-900 border-2 border-sky-500/40 rounded-xl p-6 space-y-5 relative overflow-hidden">
+        <div class="flex flex-wrap justify-between items-center border-b border-zinc-800 pb-3 gap-2">
+          <div>
+            <span class="text-[10px] uppercase tracking-widest text-sky-400 font-bold">Full-Stack Architecture</span>
+            <h2 class="text-base font-bold text-white">3. Backend Database & Dedicated Admin Portal</h2>
+          </div>
+          <select id="adminMode" onchange="refreshAll()" class="bg-zinc-950 border border-sky-500/50 text-sky-300 rounded-lg px-3 py-1.5 text-xs font-semibold">
+            <option value="Full Dedicated Admin Portal + Database">✅ Include Dedicated Admin Panel + Backend</option>
+            <option value="Static Frontend Only (No Backend)">❌ No Admin / Static Website Only</option>
+          </select>
+        </div>
+
+        <div id="adminConfigBlock" class="space-y-5">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs text-zinc-400 mb-1">Backend & Database Engine</label>
+              <select id="backendStack" onchange="refreshAll()" class="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-2 text-xs text-sky-200">
+                <option value="Supabase (PostgreSQL + Auth + Storage Buckets + RLS)">Supabase (PostgreSQL + Auth + Storage Buckets)</option>
+                <option value="Firebase (Firestore + Firebase Auth + Cloud Storage)">Firebase (Firestore + Auth + Storage)</option>
+                <option value="Next.js Server Actions + Prisma + PostgreSQL">Next.js API Routes + Prisma + PostgreSQL</option>
+                <option value="Node.js + Express + MongoDB REST API">Node.js + Express + MongoDB</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs text-zinc-400 mb-1">Admin Portal Routing Architecture</label>
+              <select id="adminRouting" onchange="refreshAll()" class="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-2 text-xs text-sky-200">
+                <option value="Dedicated /admin Route Group with Protected Middleware">Protected /admin Route inside Main Project</option>
+                <option value="Standalone Admin Web App (admin.domain.com) sharing Database">Separate Standalone Admin App (admin.domain.com)</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs text-zinc-400 mb-2">Select Admin Dashboard Modules <span class="text-zinc-500">(Generates CRUD UI + SQL Tables + API Endpoints)</span></label>
+            <div class="flex flex-wrap gap-2" data-group="adminModules">
+              <button class="chip chip-active px-3 py-1.5 rounded-lg border border-zinc-700 bg-zinc-950 text-xs" data-price="6000" data-days="1">Secure Admin Login & RBAC</button>
+              <button class="chip chip-active px-3 py-1.5 rounded-lg border border-zinc-700 bg-zinc-950 text-xs" data-price="8000" data-days="1">KPI Analytics Overview</button>
+              <button class="chip chip-active px-3 py-1.5 rounded-lg border border-zinc-700 bg-zinc-950 text-xs" data-price="12000" data-days="2">Products / Catalog CRUD + Image Upload</button>
+              <button class="chip chip-active px-3 py-1.5 rounded-lg border border-zinc-700 bg-zinc-950 text-xs" data-price="8000" data-days="1">Inquiries & WhatsApp Leads CRM</button>
+              <button class="chip px-3 py-1.5 rounded-lg border border-zinc-700 bg-zinc-950 text-xs" data-price="12000" data-days="2">Orders & Payment Status Manager</button>
+              <button class="chip px-3 py-1.5 rounded-lg border border-zinc-700 bg-zinc-950 text-xs" data-price="10000" data-days="2">Bookings / Appointments Calendar</button>
+              <button class="chip px-3 py-1.5 rounded-lg border border-zinc-700 bg-zinc-950 text-xs" data-price="7000" data-days="1">CMS (Hero Banners, Texts, SEO Settings)</button>
+              <button class="chip px-3 py-1.5 rounded-lg border border-zinc-700 bg-zinc-950 text-xs" data-price="6000" data-days="1">Reviews & Testimonials Moderation</button>
+              <button class="chip px-3 py-1.5 rounded-lg border border-zinc-700 bg-zinc-950 text-xs" data-price="5000" data-days="1">CSV / PDF Report Export</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. Frontend Tech & Quality -->
+      <section class="bg-zinc-900 border border-zinc-800 rounded-xl p-6 space-y-5">
+        <h2 class="text-base font-semibold text-amber-400 border-b border-zinc-800 pb-2">4. Frontend Stack & Quality Gates</h2>
+        <div>
+          <label class="block text-xs text-zinc-400 mb-2">Frontend Framework</label>
+          <div class="flex flex-wrap gap-2" data-group="stack" data-single="true">
+            <button class="chip chip-active px-3 py-1.5 rounded-lg border border-zinc-700 bg-zinc-950 text-xs">Next.js 15 (App Router) + TypeScript + Tailwind</button>
+            <button class="chip px-3 py-1.5 rounded-lg border border-zinc-700 bg-zinc-950 text-xs">React + Vite + TypeScript + Tailwind</button>
+            <button class="chip px-3 py-1.5 rounded-lg border border-zinc-700 bg-zinc-950 text-xs">HTML5 + Tailwind + Vanilla JS Modules</button>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs text-zinc-400 mb-2">Quality & Security Standards</label>
+          <div class="flex flex-wrap gap-2" data-group="quality">
+            <button class="chip chip-active px-3 py-1.5 rounded-lg border border-zinc-700 bg-zinc-950 text-xs" data-price="0">Row-Level Security (RLS) & Auth Guards</button>
+            <button class="chip chip-active px-3 py-1.5 rounded-lg border border-zinc-700 bg-zinc-950 text-xs" data-price="3500">Performance & Core Web Vitals</button>
+            <button class="chip chip-active px-3 py-1.5 rounded-lg border border-zinc-700 bg-zinc-950 text-xs" data-price="4000">Local SEO & JSON-LD Schema</button>
+            <button class="chip chip-active px-3 py-1.5 rounded-lg border border-zinc-700 bg-zinc-950 text-xs" data-price="0">Vercel + Supabase Deployment Guide</button>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Right Column: Multi-Prompt Output Studio (3 Specialized Prompts!) -->
+    <div class="lg:col-span-5 space-y-6">
+      <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-5 sticky top-36 space-y-4">
+        <div class="flex justify-between items-center">
+          <h3 class="font-bold text-white text-sm">Generated Engineering Prompts</h3>
+          <button onclick="copyActivePrompt(this)" class="text-xs bg-amber-500 hover:bg-amber-400 text-black font-bold px-3.5 py-1.5 rounded-lg transition">
+            📋 Copy Current Prompt
+          </button>
+        </div>
+
+        <!-- Prompt Type Switcher -->
+        <div class="grid grid-cols-3 gap-1.5 bg-zinc-950 p-1.5 rounded-xl border border-zinc-800 text-xs">
+          <button onclick="switchPromptSubtab('master')" id="sub-master" class="py-2 px-2 rounded-lg subtab-active transition text-center">
+            1. Full-Stack Master
+          </button>
+          <button onclick="switchPromptSubtab('admin')" id="sub-admin" class="py-2 px-2 rounded-lg text-zinc-400 hover:text-white transition text-center">
+            2. Admin Portal Only
+          </button>
+          <button onclick="switchPromptSubtab('sql')" id="sub-sql" class="py-2 px-2 rounded-lg text-zinc-400 hover:text-white transition text-center">
+            3. DB & SQL Schema
+          </button>
+        </div>
+
+        <p id="prompt-helper-text" class="text-[11px] text-zinc-400">
+          💡 <strong>Full-Stack Master Prompt:</strong> Builds both the Public Website, Backend Database connection, and Admin Dashboard together.
+        </p>
+
+        <textarea id="outputPrompt" rows="24" readonly class="w-full bg-zinc-950 border border-zinc-800 rounded-lg p-3 text-xs font-mono text-zinc-300 focus:outline-none leading-relaxed"></textarea>
+
+        <button onclick="switchTab('proposal')" class="w-full bg-zinc-800 hover:bg-zinc-700 text-amber-300 border border-amber-500/30 font-semibold py-2.5 rounded-xl text-xs transition">
+          📄 View Auto-Updated Client Proposal & Quotation PDF →
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <!-- ==================== TAB 2: MAPS & BRAND INTAKE ==================== -->
+  <section id="tab-intake" class="max-w-7xl mx-auto px-6 py-8 hidden no-print">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-6 space-y-4">
+        <h2 class="text-lg font-bold text-amber-400 border-b border-zinc-800 pb-2">Client Intelligence Intake (Google Maps + Brand)</h2>
+        <div>
+          <label class="block text-xs text-zinc-400 mb-1">Google Maps Business Link</label>
+          <input id="mapsUrl" oninput="refreshAll()" type="url" placeholder="https://maps.app.goo.gl/..." class="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-2 text-sm">
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs text-zinc-400 mb-1">Google Rating & Reviews</label>
+            <input id="mapsRating" oninput="refreshAll()" type="text" value="4.9 ★ (142 Google Reviews)" class="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-2 text-sm">
+          </div>
+          <div>
+            <label class="block text-xs text-zinc-400 mb-1">Existing Website Status</label>
+            <input id="existingUrl" oninput="refreshAll()" type="text" value="No website / Outdated static site" class="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-2 text-sm">
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs text-zinc-400 mb-1">Client WhatsApp Number</label>
+            <input id="phone" oninput="refreshAll()" type="text" value="+94 77 123 4567" class="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-2 text-sm">
+          </div>
+          <div>
+            <label class="block text-xs text-zinc-400 mb-1">Base Frontend Package (LKR)</label>
+            <input id="basePriceInput" oninput="refreshAll()" type="number" value="30000" class="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-2 text-sm">
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs text-zinc-400 mb-1">Identified Digital Gaps (Appears in Proposal)</label>
+          <textarea id="auditGaps" oninput="refreshAll()" rows="3" class="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-2 text-sm">1. No centralized Admin Portal for staff to upload new products, update prices, or manage stock in real time.
+2. Customer inquiries via WhatsApp are not logged in a central CRM database.
+3. Missing high-converting mobile product catalog and Local SEO schema.</textarea>
+        </div>
+      </div>
+
+      <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-6 space-y-4">
+        <h3 class="font-bold text-white text-sm">Brand Color Extractor (Upload Client Logo)</h3>
+        <input type="file" id="logoInput" accept="image/*" class="text-xs text-zinc-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-amber-500 file:text-black">
+        <canvas id="logoCanvas" class="hidden"></canvas>
+        <div class="flex items-center gap-4 pt-2">
+          <img id="logoPreview" class="h-14 w-14 object-contain rounded-lg border border-zinc-800 hidden" alt="Logo">
+          <div>
+            <span class="text-xs text-zinc-400 block">Extracted Brand Accent Color:</span>
+            <div class="flex items-center gap-2 mt-1">
+              <span id="colorSwatch" class="w-5 h-5 rounded-full border border-white/20 inline-block bg-amber-500"></span>
+              <code id="extractedHex" class="text-xs text-amber-300 font-mono">#D4AF37 (Royal Gold)</code>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== TAB 3: CLIENT PROPOSAL & QUOTATION PDF ==================== -->
+  <section id="tab-proposal" class="max-w-5xl mx-auto px-6 py-8 hidden">
+    <div class="flex justify-between items-center mb-6 bg-zinc-900 border border-zinc-800 p-4 rounded-xl no-print">
+      <div>
+        <h3 class="font-bold text-white text-sm">Full-Stack Project Proposal & Quotation (Includes Admin & Backend)</h3>
+        <p class="text-xs text-zinc-400">Ready to export as A4 PDF for your client.</p>
+      </div>
+      <button onclick="window.print()" class="bg-amber-500 hover:bg-amber-400 text-black font-bold px-5 py-2.5 rounded-xl text-sm shadow-lg transition">
+        🖨️ Print / Save as PDF
+      </button>
+    </div>
+
+    <div class="bg-zinc-900 border border-zinc-800 rounded-2xl p-8 md:p-12 space-y-8 print-card">
+      <div class="flex flex-wrap justify-between items-start border-b border-zinc-800 pb-6 gap-4">
+        <div>
+          <span class="text-xs uppercase tracking-widest text-amber-500 font-bold">Dils Media Network · Full-Stack Digital Engineering</span>
+          <h2 class="text-2xl md:text-3xl font-bold text-white print-text-dark mt-1">Web Platform & Admin System Proposal</h2>
+          <p id="prop-subtitle" class="text-sm text-zinc-400 mt-1"></p>
+        </div>
+        <div class="text-right text-xs text-zinc-400 space-y-1">
+          <div><strong class="text-white print-text-dark">Date:</strong> <span id="prop-date"></span></div>
+          <div><strong class="text-white print-text-dark">Est. Delivery:</strong> <span id="prop-timeline" class="text-amber-400 font-semibold"></span></div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+        <div class="p-4 bg-zinc-950/60 rounded-xl border border-zinc-800 print-bg-light print-card">
+          <strong class="text-amber-400 block mb-1">1. Public Customer Website</strong>
+          <p id="prop-pages" class="text-zinc-300 print-text-dark"></p>
+        </div>
+        <div class="p-4 bg-zinc-950/60 rounded-xl border border-zinc-800 print-bg-light print-card">
+          <strong class="text-sky-400 block mb-1">2. Dedicated Admin Portal & CMS</strong>
+          <p id="prop-admin" class="text-zinc-300 print-text-dark"></p>
+        </div>
+        <div class="p-4 bg-zinc-950/60 rounded-xl border border-zinc-800 print-bg-light print-card">
+          <strong class="text-emerald-400 block mb-1">3. Backend & Cloud Security</strong>
+          <p id="prop-stack" class="text-zinc-300 print-text-dark"></p>
+        </div>
+      </div>
+
+      <div class="space-y-3">
+        <h3 class="text-base font-bold text-white print-text-dark border-b border-zinc-800 pb-2">Itemized Investment Breakdown (LKR)</h3>
+        <table class="w-full text-left text-xs border-collapse">
+          <thead>
+            <tr class="border-b border-zinc-700 text-zinc-400">
+              <th class="py-2.5 px-3">System Module / Deliverable</th>
+              <th class="py-2.5 px-3">Technical Specification</th>
+              <th class="py-2.5 px-3 text-right">Investment (LKR)</th>
+            </tr>
+          </thead>
+          <tbody id="quote-table-body" class="divide-y divide-zinc-800/80 text-zinc-200 print-text-dark"></tbody>
+          <tfoot>
+            <tr class="border-t-2 border-amber-500/50 font-bold text-sm">
+              <td colspan="2" class="py-3 px-3 text-right text-amber-400">Total Full-Stack Platform Investment:</td>
+              <td id="quote-total-cell" class="py-3 px-3 text-right text-amber-400 text-base"></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    document.getElementById('prop-date').innerText = new Date().toLocaleDateString('en-LK', { year: 'numeric', month: 'short', day: 'numeric' });
+
+    let activePromptType = 'master'; // 'master' | 'admin' | 'sql'
+    let generatedPrompts = { master: '', admin: '', sql: '' };
+
+    const PALETTE_TOKENS = {
+      "Black & Gold": "--bg-primary: #09090B; --bg-surface: #121216; --text-primary: #FAFAFA; --text-muted: #A1A1AA; --accent-primary: #D4AF37; --accent-hover: #F3E5AB;",
+      "White & Royal Navy": "--bg-primary: #FFFFFF; --bg-surface: #F8FAFC; --text-primary: #0F172A; --text-muted: #475569; --accent-primary: #1E3A8A; --accent-hover: #1D4ED8;",
+      "Emerald & Ivory": "--bg-primary: #FAF8F5; --bg-surface: #F0ECE1; --text-primary: #062C21; --text-muted: #3D5A50; --accent-primary: #047857; --accent-hover: #10B981;",
+      "Earthy Terracotta": "--bg-primary: #FDFBF7; --bg-surface: #F4EFE6; --text-primary: #2C1E18; --text-muted: #6E5A4F; --accent-primary: #C25E00; --accent-hover: #E07A5F;",
+      "Monochrome Minimal": "--bg-primary: #09090B; --bg-surface: #18181B; --text-primary: #FFFFFF; --text-muted: #A1A1AA; --accent-primary: #FFFFFF; --accent-hover: #D4D4D8;"
+    };
+
+    const ADMIN_MODULE_SPECS = {
+      "Secure Admin Login & RBAC": "- **Authentication & Role Guard:** Email/Password login via Auth provider, session middleware protecting all `/admin/*` routes, and role verification (`admin` vs `editor`).",
+      "KPI Analytics Overview": "- **Executive KPI Dashboard Home:** Real-time summary cards (Total Products/Items, New Inquiries Today, Pending Bookings/Orders, Conversion Clicks) + recent activity feed.",
+      "Products / Catalog CRUD + Image Upload": "- **Catalog & Inventory Manager (Full CRUD):** Data table with search, category filter, stock status toggle (`In Stock` / `Sold` / `Featured`), modal drawer to Create/Edit items, multi-image upload to Storage Bucket, and price/spec fields.",
+      "Inquiries & WhatsApp Leads CRM": "- **Customer Leads & Inquiry CRM Table:** Captures all Contact Form submissions and WhatsApp inquiry clicks with status pipeline (`New` -> `Contacted` -> `Closed`) and 1-click 'Reply on WhatsApp' button.",
+      "Orders & Payment Status Manager": "- **Order & Checkout Management:** Track customer orders, view itemized receipts, update fulfillment status (`Pending`, `Paid`, `Shipped`, `Completed`), and filter by date.",
+      "Bookings / Appointments Calendar": "- **Bookings & Reservation Manager:** Approve, reschedule, or cancel customer appointments with automated WhatsApp confirmation message generator.",
+      "CMS (Hero Banners, Texts, SEO Settings)": "- **Dynamic Site Content & SEO Editor:** Allow admin to update homepage hero headline, promotional announcement bar, contact numbers, and default SEO meta titles without touching code.",
+      "Reviews & Testimonials Moderation": "- **Testimonials Manager:** Add verified client reviews, star ratings, and toggle visibility on the public website.",
+      "CSV / PDF Report Export": "- **Data Export Utility:** One-click CSV export for leads, inventory, and monthly order summaries."
+    };
+
+    function switchTab(tab) {
+      ['builder', 'intake', 'proposal'].forEach(t => {
+        document.getElementById(`tab-${t}`).classList.add('hidden');
+        document.getElementById(`btn-${t}`).classList.remove('tab-active');
+        document.getElementById(`btn-${t}`).classList.add('text-zinc-400');
+      });
+      document.getElementById(`tab-${tab}`).classList.remove('hidden');
+      document.getElementById(`btn-${tab}`).classList.add('tab-active');
+      document.getElementById(`btn-${tab}`).classList.remove('text-zinc-400');
+      refreshAll();
+    }
+
+    function switchPromptSubtab(type) {
+      activePromptType = type;
+      ['master', 'admin', 'sql'].forEach(t => {
+        const el = document.getElementById(`sub-${t}`);
+        el.classList.remove('subtab-active');
+        el.classList.add('text-zinc-400');
+      });
+      const activeEl = document.getElementById(`sub-${type}`);
+      activeEl.classList.add('subtab-active');
+      activeEl.classList.remove('text-zinc-400');
+
+      const helpers = {
+        master: '💡 <strong>1. Full-Stack Master Prompt:</strong> Generates the Public Website + Backend API + Admin Portal connected together.',
+        admin: '💡 <strong>2. Dedicated Admin Portal Prompt:</strong> Use this if you want the AI to build ONLY the standalone Admin Dashboard UI & CRUD logic in deep detail.',
+        sql: '💡 <strong>3. Database & SQL Blueprint:</strong> Run this to generate exact PostgreSQL/Supabase tables, RLS security policies, and storage bucket scripts.'
+      };
+      document.getElementById('prompt-helper-text').innerHTML = helpers[type];
+      document.getElementById('outputPrompt').value = generatedPrompts[type];
+    }
+
+    document.querySelectorAll('.chip').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const parent = btn.parentElement;
+        if (parent.getAttribute('data-single') === 'true') {
+          parent.querySelectorAll('.chip').forEach(b => b.classList.remove('chip-active'));
+          btn.classList.add('chip-active');
+        } else {
+          btn.classList.toggle('chip-active');
+        }
+        refreshAll();
+      });
+    });
+
+    function getSelected(group) {
+      const container = document.querySelector(`[data-group="${group}"]`);
+      if (!container) return [];
+      return Array.from(container.querySelectorAll('.chip-active')).map(b => ({
+        name: b.innerText.trim(),
+        price: parseInt(b.getAttribute('data-price') || '0', 10),
+        days: parseInt(b.getAttribute('data-days') || '0', 10)
+      }));
+    }
+
+    function formatLKR(num) {
+      return 'LKR ' + num.toLocaleString('en-LK');
+    }
+
+    function refreshAll() {
+      const aiTarget = document.getElementById('aiTarget').value;
+      const client = document.getElementById('clientName').value || 'Valued Client';
+      const industry = document.getElementById('industry').value;
+      const location = document.getElementById('location').value || 'Sri Lanka';
+      const audience = document.getElementById('audience').value;
+      const goals = document.getElementById('goals').value;
+      const typography = document.getElementById('typography').value;
+      const structure = document.getElementById('siteStructure').value;
+      const phone = document.getElementById('phone').value;
+      const mapsRating = document.getElementById('mapsRating').value;
+      const extractedHex = document.getElementById('extractedHex').innerText;
+      const basePrice = parseInt(document.getElementById('basePriceInput').value || '30000', 10);
+
+      const adminMode = document.getElementById('adminMode').value;
+      const includeAdmin = adminMode.includes('Include');
+      document.getElementById('adminConfigBlock').style.display = includeAdmin ? 'block' : 'none';
+
+      const backendStack = document.getElementById('backendStack').value;
+      const adminRouting = document.getElementById('adminRouting').value;
+
+      const personality = getSelected('personality')[0]?.name || 'Luxury Editorial';
+      const palette = getSelected('palette')[0]?.name || 'Black & Gold';
+      const animationObj = getSelected('animation')[0] || { name: 'Subtle & Premium', price: 5000, days: 1 };
+      const pagesList = getSelected('pages');
+      const featuresList = getSelected('features');
+      const adminList = includeAdmin ? getSelected('adminModules') : [];
+      const stack = getSelected('stack')[0]?.name || 'Next.js 15 + TypeScript + Tailwind';
+      const qualityList = getSelected('quality');
+
+      // Calculate Dynamic Quote & Days
+      const extraPagesCount = Math.max(0, pagesList.length - 4);
+      const extraPagesCost = extraPagesCount * 3500;
+      const featuresCost = featuresList.reduce((acc, f) => acc + f.price, 0);
+      const adminCost = adminList.reduce((acc, a) => acc + a.price, 0);
+      const qualityCost = qualityList.reduce((acc, q) => acc + q.price, 0);
+      const totalQuote = basePrice + extraPagesCost + featuresCost + adminCost + qualityCost + animationObj.price;
+
+      const totalDays = 5 + Math.ceil(extraPagesCount * 0.5) +
+        featuresList.reduce((acc, f) => acc + f.days, 0) +
+        adminList.reduce((acc, a) => acc + a.days, 0) +
+        animationObj.days;
+
+      // Update Header Counters
+      document.getElementById('count-pages').innerText = pagesList.length;
+      document.getElementById('count-features').innerText = featuresList.length;
+      document.getElementById('count-admin').innerText = adminList.length;
+      document.getElementById('live-days').innerText = `${totalDays} Days`;
+      document.getElementById('live-price').innerText = formatLKR(totalQuote);
+
+      const pageNames = pagesList.map(p => p.name).join(', ');
+      const featureNames = featuresList.map(f => f.name).join(', ');
+      const adminNames = adminList.map(a => a.name).join(', ');
+      const qualityNames = qualityList.map(q => q.name).join(', ');
+      const cssTokens = PALETTE_TOKENS[palette] || PALETTE_TOKENS["Black & Gold"];
+
+      const adminDetailedSpecs = adminList
+        .map(a => ADMIN_MODULE_SPECS[a.name] || `- **${a.name}:** Full CRUD implementation.`)
+        .join('\n');
+
+      let targetFormatInstruction = '';
+      if (aiTarget === 'nextjs_full') {
+        targetFormatInstruction = `Deliver a modular Next.js App Router repository structure:
+- Public customer routes under \`app/(public)/...\`
+- Dedicated Admin Portal under \`app/(admin)/admin/...\` protected by auth middleware
+- Database client, schema & server actions/API handlers under \`lib/db/\` and \`app/api/\`.`;
+      } else if (aiTarget === 'bolt_lovable') {
+        targetFormatInstruction = `Deliver a complete full-stack web application compatible with Bolt.new / Lovable:
+- Include seamless view switching between the Public Storefront and the Protected \`/admin\` Dashboard.
+- Provide working Supabase client integration with automatic fallback to pre-seeded state so every CRUD action (Add/Edit/Delete product, status update, lead capture) works immediately in the live preview.`;
+      } else {
+        targetFormatInstruction = `Deliver TWO complete, self-contained HTML applications (or a unified SPA with top mode-switcher between "Public Website" and "Admin Control Center") using shared \`localStorage\` / Supabase REST sync so adding a product in Admin immediately updates the Public Website.`;
+      }
+
+      // ================= PROMPT 1: FULL-STACK MASTER PROMPT =================
+      generatedPrompts.master = `# ROLE & FULL-STACK ARCHITECTURE OBJECTIVE
+You are a Principal Full-Stack Engineer and Lead UI/UX Architect at **Dils Media Network**.
+Build a complete, production-ready **Public Customer Website + Backend Database + Dedicated Admin Management Portal** for **${client}** (${industry} in ${location}).
+
+> **STRICT EXECUTION RULES:**
+> 1. **ZERO PLACEHOLDERS:** Never write \`// TODO\`, \`// implement later\`, or truncate components. Every form, CRUD modal, filter, and database action must be fully coded.
+> 2. **REAL DATA SYNCHRONIZATION:** Creating, editing, or deleting an item in the Admin Panel MUST dynamically reflect on the Public Website.
+> 3. **AUTHENTIC COPYWRITING:** Write realistic, luxury/industry-specific content for **${client}** in **${location}** targeting **${audience}**.
+
+---
+
+# 1. CLIENT & COMMERCIAL CONTEXT
+- **Business Name:** ${client} (${industry})
+- **Location:** ${location} | **WhatsApp Concierge:** ${phone}
+- **Google Reputation:** ${mapsRating}
+- **Primary Business Goals:** ${goals}
+
+---
+
+# 2. PUBLIC STOREFRONT DESIGN & PAGES
+- **Design Personality:** ${personality} | **Palette:** ${palette} (${extractedHex})
+- **CSS Root Tokens:** \`${cssTokens}\`
+- **Typography:** ${typography} | **Motion:** ${animationObj.name}
+- **Required Public Pages (${pagesList.length}):** ${pageNames}
+- **Customer-Facing Modules (${featuresList.length}):** ${featureNames}
+
+---
+
+# 3. BACKEND, DATABASE & DEDICATED ADMIN PORTAL ARCHITECTURE
+- **Admin Mode:** ${adminMode}
+- **Backend & Database Stack:** ${backendStack}
+- **Admin Routing Strategy:** ${adminRouting}
+- **Required Admin Modules (${adminList.length}):**
+${includeAdmin ? adminDetailedSpecs : '- Static frontend architecture only (no admin portal required).'}
+
+---
+
+# 4. FRONTEND TECH STACK & TARGET DELIVERY FORMAT
+- **Frontend Framework:** ${stack}
+- **Security & Quality Gates:** ${qualityNames}
+- **Target Environment Instructions:**
+${targetFormatInstruction}
+
+---
+
+# 5. STEP-BY-STEP DELIVERABLES REQUIRED
+1. **System Architecture & Database Schema:** Complete SQL/Schema definitions for Products/Catalog, Leads/Inquiries, Bookings/Orders, and Site Settings.
+2. **Backend Data Layer & API / Server Actions:** Reusable CRUD functions with real-time state sync.
+3. **Public Customer Website Code:** Complete, high-converting implementation of all ${pagesList.length} public pages.
+4. **Dedicated Admin Portal Code (\`/admin\`):** Sidebar navigation, KPI metric cards, interactive CRUD data tables, Add/Edit slide-over modals, image upload handler, and status badges.`;
+
+      // ================= PROMPT 2: DEDICATED ADMIN PORTAL ONLY PROMPT =================
+      generatedPrompts.admin = `# ROLE & OBJECTIVE: DEDICATED ADMIN PORTAL & CMS ENGINEER
+You are a Senior SaaS Dashboard & Back-Office Architect at **Dils Media Network**.
+Build the complete, standalone **Admin Control Center (\`/admin\`)** for **${client}** (${industry} in ${location}).
+
+## 1. ADMIN PORTAL TECH & BACKEND CONNECTION
+- **Frontend Stack:** ${stack} (Dark/Light mode sleek SaaS dashboard UI using Tailwind CSS + Lucide Icons)
+- **Backend / Database:** ${backendStack}
+- **Routing:** ${adminRouting}
+
+## 2. REQUIRED ADMIN MODULES & CRUD WORKFLOWS
+Implement a responsive Sidebar Layout + Top Header (Admin Profile, Quick Actions, Notification Bell, 'View Live Website' button) with the following working views:
+${adminDetailedSpecs}
+
+## 3. MANDATORY UI/UX & FUNCTIONAL DETAILS
+1. **Interactive CRUD Modals:** Full form validation for Adding/Editing items (Title, Category, Price in LKR/USD, Stock/Availability toggle, Specifications JSON, and Multi-Image Upload preview).
+2. **Search, Filter & Pagination:** Instant search bar and status filter pills on every table.
+3. **WhatsApp CRM Action:** Inside the Leads/Orders/Bookings tables, include a 1-click button that opens WhatsApp Web with a pre-filled status update message to the customer.
+4. **Complete Working Code:** Provide the entire working Admin Portal with pre-populated realistic data for **${client}** so all tabs, charts, and CRUD operations work immediately.`;
+
+      // ================= PROMPT 3: DATABASE & SQL SCHEMA BLUEPRINT =================
+      generatedPrompts.sql = `# ROLE & OBJECTIVE: DATABASE ARCHITECT & SECURITY ENGINEER
+Generate the complete production-ready **Database Schema, SQL Migration Script, Storage Bucket Config, and Row-Level Security (RLS) Policies** for **${client}** (${industry}).
+
+- **Target Database Engine:** ${backendStack}
+- **Connected Modules:** ${pageNames} | Admin Modules: ${adminNames}
+
+## DELIVERABLES REQUIRED:
+1. **Complete SQL Migration Script (\`schema.sql\`):**
+   - \`products\` / \`catalog_items\` table (id, title, slug, category, price_lkr, price_usd, specs JSONB, images TEXT[], is_featured, status, created_at)
+   - \`inquiries\` / \`whatsapp_leads\` table (id, customer_name, phone, email, product_id, message, status, created_at)
+   - \`bookings_or_orders\` table (id, reference_code, customer_name, phone, items JSONB, total_amount, payment_status, scheduled_date, status, created_at)
+   - \`site_settings\` & \`testimonials\` tables.
+2. **Row-Level Security (RLS) Policies:**
+   - Public anonymous users: \`SELECT\` published catalog items & testimonials; \`INSERT\` into inquiries/bookings.
+   - Authenticated Admin role: Full \`SELECT, INSERT, UPDATE, DELETE\` across all tables.
+3. **Storage Bucket Configuration:** Policies for \`product-images\` bucket (Public read, Authenticated Admin upload/delete).
+4. **TypeScript Database Types & Helper Client (\`lib/supabase.ts\`):** Ready-to-import typed CRUD helper functions.`;
+
+      document.getElementById('outputPrompt').value = generatedPrompts[activePromptType];
+
+      // Update Proposal & PDF Quote (Tab 3)
+      document.getElementById('prop-subtitle').innerText = `Prepared exclusively for ${client} · ${location}`;
+      document.getElementById('prop-timeline').innerText = `${totalDays} Working Days`;
+      document.getElementById('prop-pages').innerText = `${structure} (${pagesList.length} Pages): ${pageNames} + ${featureNames}`;
+      document.getElementById('prop-admin').innerText = includeAdmin ? `Dedicated Admin Portal (${adminList.length} Modules): ${adminNames}` : 'Static Frontend Only (No Admin Panel)';
+      document.getElementById('prop-stack').innerText = `${stack} + ${includeAdmin ? backendStack : 'Cloud CDN Hosting'}`;
+
+      const tbody = document.getElementById('quote-table-body');
+      tbody.innerHTML = '';
+      const rows = [
+        { item: 'Public Website UI/UX & Base Engineering', spec: `${personality} Design, Responsive Layout, 4 Core Pages`, cost: basePrice },
+      ];
+      if (extraPagesCount > 0) rows.push({ item: `Additional Public Pages (${extraPagesCount})`, spec: pageNames, cost: extraPagesCost });
+      if (animationObj.price > 0) rows.push({ item: 'Interactive Motion & Animations', spec: animationObj.name, cost: animationObj.price });
+      featuresList.forEach(f => rows.push({ item: `Frontend Module: ${f.name}`, spec: 'Public customer feature', cost: f.price }));
+      if (includeAdmin) {
+        adminList.forEach(a => rows.push({ item: `Admin & Backend: ${a.name}`, spec: backendStack.split('(')[0], cost: a.price }));
+      }
+      qualityList.filter(q => q.price > 0).forEach(q => rows.push({ item: `Quality Standard: ${q.name}`, spec: 'Production optimization', cost: q.price }));
+
+      rows.forEach(r => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td class="py-2.5 px-3 font-medium">${r.item}</td>
+          <td class="py-2.5 px-3 text-zinc-400">${r.spec}</td>
+          <td class="py-2.5 px-3 text-right font-mono">${r.cost === 0 ? 'Included' : formatLKR(r.cost)}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      document.getElementById('quote-total-cell').innerText = formatLKR(totalQuote);
+    }
+
+    function copyActivePrompt(btn) {
+      const el = document.getElementById('outputPrompt');
+      el.select();
+      navigator.clipboard.writeText(el.value);
+      const orig = btn.innerText;
+      btn.innerText = '✓ Copied to Clipboard!';
+      setTimeout(() => btn.innerText = orig, 2000);
+    }
+
+    refreshAll();
+  </script>
+</body>
+</html>
